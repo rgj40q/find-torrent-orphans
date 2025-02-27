@@ -9,7 +9,7 @@ for p in $PORTS; do
 		content_path=$(curl -s "http://127.0.0.1:$p/api/v2/torrents/info?hashes=$i" | jq -r '.[].content_path')
 		parent_dir=$(dirname "$content_path" | sed 's/\\/\//g')
 		curl -s "http://127.0.0.1:$p/api/v2/torrents/files?hash=$i" | jq -cr '.[].name' | while read rel_path; do
-			if [[ $(basename "$parent_dir") = $(dirname "$rel_path") ]]; then
+			if [[ X$(basename "$parent_dir") = X$(dirname "$rel_path") ]]; then
 				parent_dir=$(dirname "$parent_dir")
 			fi
 			printf '%s/%s\n' "$parent_dir" "$rel_path"
