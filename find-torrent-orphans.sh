@@ -5,7 +5,7 @@ PORTS='9090 9191 9292 9393'
 DISKS='L M N O P Q R Z'
 
 for p in $PORTS; do
-	for i in $(curl -s "http://127.0.0.1:$p/api/v2/sync/maindata?rid=0" -H 'Accept: application/json' | jq '.torrents[] | {infohash_v1}[]' -cr | head -n 100); do
+	for i in $(curl -s "http://127.0.0.1:$p/api/v2/sync/maindata?rid=0" -H 'Accept: application/json' | jq '.torrents[] | {infohash_v1}[]' -cr); do
 		content_path=$(curl -s "http://127.0.0.1:$p/api/v2/torrents/info?hashes=$i" | jq -r '.[].content_path')
 		parent_dir=$(dirname "$content_path" | sed 's/\\/\//g')
 		curl -s "http://127.0.0.1:$p/api/v2/torrents/files?hash=$i" | jq -cr '.[].name' | while read rel_path; do
